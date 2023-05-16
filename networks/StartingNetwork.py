@@ -12,15 +12,21 @@ class StartingNetwork(torch.nn.Module):
         super().__init__()
         self.conv1 = nn.Sequential(
             nn.Conv2d(
-                in_channels=3,
-                out_channels=4,
-                kernel_size=5,
-                
-            )
-
-
-
+                in_channels=3,              
+                out_channels=16,            
+                kernel_size=5,              
+                stride=1,                   
+                padding=2,                  
+            ),                              
+            nn.ReLU(),                      
+            nn.MaxPool2d(kernel_size=2),    
         )
+        self.conv2 = nn.Sequential(
+            nn.Conv2d(16, 32, 5, 1, 2),     
+            nn.ReLU(),                      
+            nn.MaxPool2d(2),                
+        )
+        self.output = nn.Linear(32 * 7 * 7, 10)
 
 
 
@@ -29,7 +35,9 @@ class StartingNetwork(torch.nn.Module):
         # self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
-        x = self.flatten(x)
-        x = self.fc(x)
-        x = self.sigmoid(x)
-        return x
+        x = self.conv1(x)
+        x = self.conv2(x)
+        x = x.view(x.size(0), -1)
+        output = self.output(x)
+
+        return output
