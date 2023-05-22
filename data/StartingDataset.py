@@ -2,6 +2,8 @@ import torch
 import os
 import pandas as pd
 from torchvision.io import read_image
+from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import OneHotEncoder
 
 
 
@@ -11,6 +13,7 @@ class StartingDataset(torch.utils.data.Dataset):
     Below is modified to take custom dataset.
     """
 
+    
     def __init__(self, mapping_file, img_directory, transform = None, target_transform = None):
         self.labels = pd.read_csv(mapping_file)
         self.img_directory = img_directory
