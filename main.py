@@ -14,7 +14,8 @@ import torchvision.transforms as transforms
 def oneHotEncode_labels(labels):
     ogValues = np.array(labels)
     label_encoder = LabelEncoder()
-    int_encoded_values = label_encoder.fit_transform(ogValues).reshape(len(int_encoded_values, 1))
+    int_encoded_values = label_encoder.fit_transform(ogValues)
+    int_encoded_values = int_encoded_values.reshape(len(int_encoded_values), 1)
     oneHot_encoder = OneHotEncoder(sparse=False)
 
     oneHotEncoded_values = oneHot_encoder.fit_transform(int_encoded_values)
@@ -59,6 +60,10 @@ def main():
 
 
     oneHot_values, le = oneHotEncode_labels(train_df["Id"])
+
+    train_dataset = StartingDataset(img_directory="./humpback-whale-identification/train/", dataMode="train", df = train_df, transform=data_transforms, labels=oneHot_values)
+
+    print(train_dataset[3])
 
 
 
